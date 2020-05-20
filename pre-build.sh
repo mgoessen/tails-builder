@@ -15,10 +15,13 @@ sudo apt install \
     ebtables \
     qemu-system-x86 \
     qemu-utils \
-    vagrant \
-    vagrant-libvirt \
     vmdebootstrap && \
 sudo systemctl restart libvirtd
+
+sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb && \
+sudo dpkg -i vagrant_2.2.7_x86_64.deb && \
+vagrant --version && \
+sudo vagrant plugin install vagrant-libvirt
 
 for group in kvm libvirt libvirt-qemu ; do
    sudo adduser "$(whoami)" "$group"
