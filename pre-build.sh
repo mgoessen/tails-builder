@@ -18,7 +18,6 @@ sudo apt install \
     vagrant \
     vagrant-libvirt \
     vmdebootstrap && \
-    bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev \ &&
 sudo systemctl restart libvirtd
 
 for group in kvm libvirt libvirt-qemu ; do
