@@ -3,6 +3,7 @@
 free -m
 cat /proc/cpuinfo
 
+sudo add-apt-repository universe && \
 sudo apt install \
     psmisc \
     git \
