@@ -5,6 +5,4 @@ cd tails && \
 git checkout devel && \
 git submodule update --init
 
-id
-
-rake build && rake vm:halt
+rake build --provider=libvirt && rake vm:halt

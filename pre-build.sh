@@ -18,7 +18,6 @@ sudo apt install \
     vagrant \
     vagrant-libvirt \
     vmdebootstrap && \
-sudo apt upgrade && \
 sudo systemctl restart libvirtd
 
 for group in kvm libvirt libvirt-qemu ; do
