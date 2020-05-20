@@ -1,0 +1,9 @@
+branches:
+  only:
+  - master
+language: generic
+sudo: true
+dist: bionic
+before_install: ./pre-build.sh
+script: ./build.sh
+after_success: ./post-build.sh
