@@ -16,6 +16,7 @@ sudo apt install \
     qemu-system-x86 \
     qemu-utils \
     vmdebootstrap && \
+    bridge-utils dnsmasq-base ebtables libvirt-bin libvirt-dev qemu-kvm qemu-utils ruby-dev \ &&
 sudo systemctl restart libvirtd
 
 sudo wget -nv https://releases.hashicorp.com/vagrant/2.2.7/vagrant_2.2.7_x86_64.deb && \
