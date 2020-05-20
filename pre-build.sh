@@ -1,0 +1,23 @@
+#!/bin/sh
+
+free -m
+cat /proc/cpuinfo
+
+sudo apt install \
+    psmisc \
+    git \
+    rake \
+    libvirt-daemon-system \
+    dnsmasq-base \
+    ebtables \
+    qemu-system-x86 \
+    qemu-utils \
+    vagrant \
+    vagrant-libvirt \
+    vmdebootstrap && \
+sudo systemctl restart libvirtd
+
+for group in kvm libvirt libvirt-qemu ; do
+   sudo adduser "$(whoami)" "$group"
+done
+
