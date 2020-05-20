@@ -5,5 +5,4 @@ cd tails && \
 git checkout devel && \
 git submodule update --init
 
-export VAGRANT_DEFAULT_PROVIDER=libvirt
-rake build && rake vm:halt
+rake build --trace && rake vm:halt
