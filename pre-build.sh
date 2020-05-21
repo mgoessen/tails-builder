@@ -18,7 +18,9 @@ sudo apt install \
     vagrant \
     vagrant-libvirt \
     vmdebootstrap && \
+sudo adduser libvirt-qemu travis && \
 sudo systemctl restart libvirtd
+
 sudo apt-get clean
 df -h
 
