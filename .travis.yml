@@ -4,6 +4,8 @@ branches:
 language: generic
 sudo: true
 dist: bionic
-before_install: ./pre-build.sh
+before_install:
+ - ./pre-build.sh
+ - unset GEM_PATH GEM_HOME
 script: ./build.sh
 after_success: ./post-build.sh
