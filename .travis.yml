@@ -4,6 +4,9 @@ branches:
 language: generic
 sudo: true
 dist: bionic
+cache:
+  directories:
+  - /home/travis/.vagrant.d/boxes
 before_install:
  - ./pre-build.sh
  - unset GEM_PATH GEM_HOME
