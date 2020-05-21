@@ -8,16 +8,15 @@ git checkout devel && \
 git submodule update --init
 
 ls -alh $HOME
-ls -alh $HOME/tails
-ls -alh $HOME/tails/vagrant
 chmod g+rx $HOME
-#chmod 755 -R $HOME
-#chmod 755 -R $HOME/tails
-#chmod 755 -R $HOME/tails/vagrant
 
 cd vagrant
 sudo su travis -c 'vagrant up --provider=libvirt'
-sudo su travis -c 'vagrant ssh -c "echo test"'
 
+ls -alh /home/travis/.ssh
+ls -alh /home/travis/.ssh/config
+cat /home/travis/.ssh/config
+
+sudo su travis -c 'vagrant ssh -c "echo test"'
 
 sudo su travis -c "rake build" && sudo su travis -c "rake vm:halt"
