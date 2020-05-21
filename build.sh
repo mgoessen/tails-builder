@@ -15,7 +15,8 @@ sudo su travis -c 'vagrant up --provider=libvirt'
 
 ls -alh /home/travis/.ssh
 ls -alh /home/travis/.ssh/config
-cat /home/travis/.ssh/config
+chmod 755 /home/travis/.ssh
+chmod 755 /home/travis/.ssh/config
 
 sudo su travis -c 'vagrant ssh -c "echo test"'
 
