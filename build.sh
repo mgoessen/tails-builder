@@ -8,10 +8,11 @@ git checkout devel && \
 git submodule update --init
 
 ls -alh $HOME
-ls -alh tails
-ls -alh tails/vagrant
-chmod 755 -R $HOME
-chmod 755 -R $HOME/tails
-chmod 755 -R $HOME/tails/vagrant
+ls -alh $HOME/tails
+ls -alh $HOME/tails/vagrant
+chmod g+rx $HOME
+#chmod 755 -R $HOME
+#chmod 755 -R $HOME/tails
+#chmod 755 -R $HOME/tails/vagrant
 
 sudo su travis -c "rake build" && sudo su travis -c "rake vm:halt"
