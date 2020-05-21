@@ -17,6 +17,7 @@ sudo apt install \
     qemu-utils \
     vagrant \
     vagrant-libvirt \
+    ssh \
     vmdebootstrap && \
 sudo adduser libvirt-qemu travis && \
 sudo systemctl restart libvirtd
