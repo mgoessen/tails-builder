@@ -17,7 +17,7 @@ chmod g+rx $HOME
 
 cd vagrant
 sudo su travis -c 'vagrant up --provider=libvirt'
-sudo su travis -c 'vagrant ssh -c "echo \'hello world!\"'
+sudo su travis -c 'vagrant ssh -c "echo \'hello world!\'"'
 
 
 sudo su travis -c "rake build" && sudo su travis -c "rake vm:halt"
