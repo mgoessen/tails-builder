@@ -12,4 +12,4 @@ cd tails && \
 git checkout devel && \
 git submodule update --init
 
-sudo rake build --trace && rake vm:halt
+sudo rake build && sudo rake vm:halt
