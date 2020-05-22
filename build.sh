@@ -4,7 +4,7 @@ gem environment
 
 git clone https://git-tails.immerda.ch/tails && \
 cd tails && \
-git checkout -b 4.6 4.6 && \
+git checkout stable && \
 git submodule update --init
 
 chmod 755 $HOME
