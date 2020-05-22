@@ -3,4 +3,4 @@
 ls -al
 
 ls -al tails-*
-sha256sum tails-*
+sha256sum tails/tails-*
