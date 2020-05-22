@@ -2,5 +2,5 @@
 
 ls -al
 
-ls -al tails*
-sha256sum tails*
+ls -al tails-*
+sha256sum tails-*
