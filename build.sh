@@ -2,8 +2,7 @@
 
 gem environment
 
-# git clone https://git-tails.immerda.ch/tails && \
-git clone https://github.com/mgoessen/tails && \
+git clone https://git-tails.immerda.ch/tails && \
 cd tails && \
 git checkout -b 4.6 4.6 && \
 git submodule update --init
