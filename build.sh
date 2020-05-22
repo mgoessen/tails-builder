@@ -11,5 +11,6 @@ chmod 755 $HOME
 chmod 755 /home/travis/.ssh
 chmod 755 /home/travis/.ssh/config
 
+export TAILS_BUILD_OPTIONS="fastcomp"
 #sudo su travis -c "rake vm:provision" && sudo su travis -c "rake vm:destroy"
 sudo su travis -c "rake build" && sudo su travis -c "rake vm:halt"
