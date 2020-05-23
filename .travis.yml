@@ -20,18 +20,18 @@ addons:
   apt:
     update: true
     # https://tails.boum.org/contribute/build
-    packages: |
-      psmisc
-      git
-      rake
-      libvirt-daemon-system
-      dnsmasq-base
-      ebtables
-      qemu-system-x86
-      qemu-utils
-      vagrant
-      vagrant-libvirt
-      vmdebootstrap
+    packages:
+     - psmisc
+     - git
+     - rake
+     - libvirt-daemon-system
+     - dnsmasq-base
+     - ebtables
+     - qemu-system-x86
+     - qemu-utils
+     - vagrant
+     - vagrant-libvirt
+     - vmdebootstrap
 
 before_install:
  # Remove travis overides
