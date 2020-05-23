@@ -45,7 +45,7 @@ before_install:
  - sudo systemctl restart libvirtd
 
 install:
- - git clone --recurse-submodules clone https://git-tails.immerda.ch/tails -j4 
+ - git clone --recurse-submodules https://git-tails.immerda.ch/tails -j4 
  - cd tails; git checkout $TAILS_VERSION
  # Force re-read of permissions
  - sudo -u $(whoami) su -c "rake basebox:clean_old"
