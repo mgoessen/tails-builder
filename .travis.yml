@@ -5,17 +5,8 @@ env:
     # see https://tails.boum.org/contribute/build
     - TAILS_BUILD_OPTIONS= 
     - ARTIFACTS=".."
-
-  jobs:
-    # Travis build matrix, 3 subsequent builds with those parameters
-    # First build will be used to ensure Vagrant Box is ready & cached
-    - INIT_CACHE_ONLY=1 TRY=0
-    # Second build is likely to not succeed in time but will fill apt-cache-ng
-    - INIT_CACHE_ONLY=0 TRY=1
-    # Third build should pass 
-    - INIT_CACHE_ONLY=0 TRY=2
-#    - allow_failures:
-#      - env: TRY=0 TRY=1
+    # Only build base VM
+    - INIT_CACHE_ONLY=1
 
 branches:
   only:
