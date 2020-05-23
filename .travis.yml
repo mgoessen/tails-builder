@@ -3,6 +3,7 @@ env:
     - INIT_CACHE_ONLY=1
     - TAILS_ORIGIN=https://git-tails.immerda.ch/tails
     - TAILS_VERSION=stable
+    - TAILS_BUILD_OPTIONS=ignorechanges
 
 branches:
   only:
@@ -58,8 +59,8 @@ install:
  - sudo su $(whoami) -c "rake vm:up"
 
 script:
- # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (47 vs 50).
- -  test INIT_CACHE_ONLY != 1 && travis_wait 47 sudo su travis -c "rake build" || true
+ - test INIT_CACHE_ONLY == 1 && exit 0
+ - travis_wait 47 sudo su travis -c "rake build" || true
 
 before_cache:
  - sudo su travis -c "rake vm:destroy"
