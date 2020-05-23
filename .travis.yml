@@ -41,11 +41,14 @@ before_install:
  - sudo adduser $(whoami) libvirt
  - sudo adduser $(whoami) libvirt-qemu
  # vagrant ssh breaks without it. !!!FIXME report!!!
- - sudo chmod 755 $HOME; sudo chmod 755 $HOME/.ssh
+ - sudo chmod 755 $HOME
+ - sudo chmod 755 $HOME/.ssh 
+ - sudo chmod 755 $HOME/.ssh/config;
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
  # cache cant be restored as it would requires sudo ; we do it ourselves
  - sudo mv /home/travis/.images/* /var/lib/libvirt/images || true
+
 install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
@@ -55,8 +58,8 @@ install:
  - sudo su $(whoami) -c "rake vm:up"
 
 script:
- # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (49 vs 50).
- -  test INIT_CACHE_ONLY != 1 && travis_wait 49 sudo su travis -c "rake build" || true
+ # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (47 vs 50).
+ -  test INIT_CACHE_ONLY != 1 && travis_wait 47 sudo su travis -c "rake build" || true
 
 before_cache:
  - sudo su travis -c "rake vm:destroy"
