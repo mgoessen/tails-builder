@@ -8,11 +8,13 @@ env:
   jobs:
     # Travis build matrix, 3 subsequent builds with those parameters
     # First build will be used to ensure Vagrant Box is ready & cached
-    - INIT_CACHE_ONLY=1
+    - INIT_CACHE_ONLY=1 TRY=0
     # Second build is likely to fail but will fill apt-cache-ng
     - INIT_CACHE_ONLY=0 TRY=1
     # Third build should pass 
     - INIT_CACHE_ONLY=0 TRY=2
+   allow_failures:
+     - env: TRY=0 TRY=1
 
 branches:
   only:
@@ -70,9 +72,9 @@ install:
 script:
  # Only run if INIT_CACHE_ONLY != 1
  # Dance to make travis happy \o/
- # But not too long, we have to cache things after...
+ # But not for too long, we have to cache things after...
  # Note that all the next commands are in fact concatened
- - test INIT_CACHE_ONLY == 1 ||
+ - test $INIT_CACHE_ONLY = 1 ||
      while sleep 5m; do echo 'Staying aliiiveeeee'; done &
        timeout 2700 sudo su $(whoami) -c "rake build";
      kill %1
