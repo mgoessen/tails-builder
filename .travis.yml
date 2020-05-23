@@ -6,7 +6,7 @@ env:
     - TAILS_BUILD_OPTIONS= 
     - ARTIFACTS=".."
     # Only build base VM
-    - INIT_CACHE_ONLY=1
+    # - INIT_CACHE_ONLY=1
 
 branches:
   only:
