@@ -47,7 +47,7 @@ install:
  - cd tails; git checkout $TAILS_VERSION
  # Force re-read of permissions
  - sudo -u $(whoami) su -c "rake basebox:clean_old"
- - sudo -u $(whoami) su -c "rake basebox:build"
+ - sudo -u $(whoami) su -c "rake basebox:create"
  - sudo -u $(whoami) su -c "rake vm:up"
 
 script:
