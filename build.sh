@@ -15,4 +15,4 @@ sudo su travis -c "rake vm:ssh echo '== VM OK ==' " && \
 #sudo su travis -c "rake build" && \
 
 sudo su travis -c "rake vm:halt" && \
-sudo su travis -c "rake vm:destroy" \ &&
+sudo su travis -c "rake vm:destroy"
