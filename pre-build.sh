@@ -1,9 +1,5 @@
 #!/bin/sh
 
-free -m
-cat /proc/cpuinfo
-df -h
-
 sudo add-apt-repository universe && \
 sudo apt update && \
 sudo apt install \
@@ -18,14 +14,15 @@ sudo apt install \
     vagrant \
     vagrant-libvirt \
     ssh \
-    vmdebootstrap && \
-sudo adduser libvirt-qemu travis && \
-sudo systemctl restart libvirtd
-
-sudo apt-get clean
-df -h
+    vmdebootstrap
 
 for group in kvm libvirt libvirt-qemu ; do
    sudo adduser "$(whoami)" "$group"
 done
 
+chmod 755 $HOME
+chmod 755 $HOME/.ssh
+chmod 755 $HOME/.ssh/config
+
+sudo adduser libvirt-qemu $(whoami) && \
+sudo systemctl restart libvirtd
