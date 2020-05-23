@@ -6,7 +6,7 @@ env:
     - TAILS_BUILD_OPTIONS= 
     - ARTIFACTS=".."
 
-  # Travis build matrix : 3 subsequent builds with those parameters
+  # Travis build matrix, 3 subsequent builds with those parameters
   # First build will be used to ensure Vagrant Box is ready & cached
   - INIT_CACHE_ONLY=1
   # Second build is likely to fail but will fill apt-cache-ng
