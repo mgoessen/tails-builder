@@ -42,7 +42,7 @@ before_install:
  # vagrant ssh breaks without it. !!!FIXME report!!!
  - sudo chmod 755 $HOME; sudo chmod 755 $HOME/.ssh
  - sudo adduser libvirt-qemu $(id -gn)
- - systemctl restart libvirtd
+ - sudo systemctl restart libvirtd
 
 install:
  - git clone --recurse-submodules clone https://git-tails.immerda.ch/tails -j4 
