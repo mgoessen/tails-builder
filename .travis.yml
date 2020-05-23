@@ -1,6 +1,8 @@
 env:
-  - INIT_CACHE_ONLY=1
-  - VERSION=stable
+  global:
+    - INIT_CACHE_ONLY=1
+    - VERSION=stable
+
 branches:
   only:
   - master
