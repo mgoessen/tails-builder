@@ -3,7 +3,7 @@ env:
     - INIT_CACHE_ONLY=1
     - TAILS_ORIGIN=https://git-tails.immerda.ch/tails
     - TAILS_VERSION=stable
-    - TAILS_BUILD_OPTIONS=ignorechanges
+#    - TAILS_BUILD_OPTIONS=ignorechanges
 
 branches:
   only:
@@ -61,7 +61,7 @@ install:
 script:
  - test INIT_CACHE_ONLY == 1 && exit 0
  - while sleep 9m; do echo staying aliiiveeeeee; done &
-   - sudo su travis -c "rake build"
+   - timeout 2700 sudo su travis -c "rake build"
  - kill %1
 
 before_cache:
