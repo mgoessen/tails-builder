@@ -3,5 +3,7 @@
 ls -al
 
 ls -al tails-*
+
 sha256sum tails/tails-*
-find tails/vagrant
+
+ls -alh /var/lib/libvirt/images
