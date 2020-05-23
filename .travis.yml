@@ -7,6 +7,7 @@ dist: bionic
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
+  - /var/lib/libvirt/images
 before_install:
  - ./pre-build.sh
  - unset GEM_PATH GEM_HOME
