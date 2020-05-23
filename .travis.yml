@@ -5,6 +5,8 @@ env:
     # see https://tails.boum.org/contribute/build
     - TAILS_BUILD_OPTIONS= 
     - ARTIFACTS=".."
+    # Only build base VM
+    # - INIT_CACHE_ONLY=1
 
 branches:
   only:
@@ -50,40 +52,23 @@ before_install:
  - sudo systemctl restart libvirtd
  # cache cant be restored as it would requires sudo ; we do it ourselves
  - sudo mv /home/travis/.images/* /var/lib/libvirt/images || true
+
+install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
+ # We use sudo su $(whoami) to force re-read of added groups
+ - sudo su $(whoami) -c "rake basebox:clean_old"
+ - sudo su $(whoami) -c "rake basebox:create"
+ - sudo su $(whoami) -c "rake vm:up"
 
- 
-jobs:
-  include:
-  - name: Provision
-  - install:
-    # We use sudo su $(whoami) to force re-read of added groups
-    - sudo su $(whoami) -c "rake basebox:clean_old"
-    - sudo su $(whoami) -c "rake basebox:create"
-    - sudo su $(whoami) -c "rake vm:up"
-
-  - name: Build try #1
-    - install
-      - sudo su $(whoami) -c "rake vm:up"
-    - script:
-      # Dance to make travis happy \o/
-      # But not for too long, we have to cache things after...
-      # Note that all the next commands are in fact concatened
-      - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-          timeout 2700 sudo su $(whoami) -c "rake build";
-        kill %1
-
-  - name: Build try #2
-    - install
-      - sudo su $(whoami) -c "rake vm:up"
-    - script:
-      # Dance to make travis happy \o/
-      # But not for too long, we have to cache things after...
-      # Note that all the next commands are in fact concatened
-      - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-          timeout 2700 sudo su $(whoami) -c "rake build";
-        kill %1
+script:
+ # Only run if INIT_CACHE_ONLY != 1
+ # Dance to make travis happy \o/
+ # But not for too long, we have to cache things after...
+ # Note that all the next commands are in fact concatened
+ - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
+     test $INIT_CACHE_ONLY = 1 || timeout 2700 sudo su $(whoami) -c "rake build";
+   kill %1
 
 before_cache:
  - sudo su $(whoami) -c "rake vm:destroy"
