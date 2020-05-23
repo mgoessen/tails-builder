@@ -12,7 +12,7 @@ git submodule update --init
 export TAILS_BUILD_OPTIONS="fastcomp"
 sudo su travis -c "rake vm:up" && \
 sudo su travis -c "rake vm:provision" \ &&
-sudo su travis -c "rake vm:ssh echo '== VM OK ==' " && \
+sudo su travis -c "rake vm:ssh -c echo '== VM OK ==' " && \
 
 #sudo su travis -c "rake build" && \
 
