@@ -52,7 +52,7 @@ install:
 
 script:
  # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (49 vs 50).
- -  [ INIT_CACHE_ONLY != 1 ] && travis_wait 49 sudo su travis -c "rake build" || true
+ -  test INIT_CACHE_ONLY != 1 && travis_wait 49 sudo su travis -c "rake build" || true
 
 before_cache:
  - sudo su travis -c "rake vm:destroy"
