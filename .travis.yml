@@ -1,15 +1,63 @@
+env:
+  - INIT_CACHE_ONLY=1 # INIT_CACHE_ONLY=0
+  - VERSION=stable
 branches:
   only:
   - master
-language: generic
-sudo: true
+
+os: linux
 dist: bionic
+language: generic
+
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
   - /var/lib/libvirt/images
+
+addons:
+  apt:
+    update: true
+    # https://tails.boum.org/contribute/build
+    packages: |
+      psmisc
+      git
+      rake
+      libvirt-daemon-system
+      dnsmasq-base
+      ebtables
+      qemu-system-x86
+      qemu-utils
+      vagrant
+      vagrant-libvirt
+      vmdebootstrap
+
 before_install:
- - ./pre-build.sh
+ # Remove travis overides
  - unset GEM_PATH GEM_HOME
-script: travis_wait 50 ./build.sh
-after_success: ./post-build.sh
+ - sudo adduser $(whoami) kvm
+ - sudo adduser $(whoami) libvirt
+ - sudo adduser $(whoami) libvirt-qemu
+ # vagrant ssh breaks without it. !!!FIXME report!!!
+ - sudo chmod 755 $HOME; sudo chmod 755 $HOME/.ssh
+ - sudo adduser libvirt-qemu $(id -gn)
+ - systemctl restart libvirtd
+
+install:
+ - git clone --recurse-submodules clone https://git-tails.immerda.ch/tails -j4 
+ - cd tails; git checkout $TAILS_VERSION
+ # Force re-read of permissions
+ - sudo -u $(whoami) su -c "rake basebox:clean_old"
+ - sudo -u $(whoami) su -c "rake basebox:build"
+ - sudo -u $(whoami) su -c "rake vm:up"
+
+script:
+ # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (49 vs 50).
+ -  [ INIT_CACHE_ONLY != 1 ] && travis_wait 49 sudo su travis -c "rake build" || true
+
+before_cache:
+ - sudo su travis -c "rake vm:destroy"
+ - sudo chown $(whoami):$(whoami) /var/lib/libvirt/images
+
+after_success:
+ - sha256sum tails/tails-*
+
