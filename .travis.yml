@@ -55,7 +55,7 @@ before_install:
  # vagrant ssh breaks without it. !!!FIXME report!!!
  - sudo chmod 755 $HOME
  - sudo chmod 755 $HOME/.ssh 
- - sudo chmod 755 $HOME/.ssh/config;
+ - sudo chmod 755 $HOME/.ssh/config
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
  # cache cant be restored as it would requires sudo ; we do it ourselves
@@ -81,8 +81,8 @@ script:
 
 before_cache:
  - sudo su $(whoami) -c "rake vm:destroy"
- - sudo mv /var/lib/libvirt/images/* /home/travis/.images/ 
- - sudo chown -R $(whoami):$(whoami) /home/travis/.images/ 
+ - sudo mv /var/lib/libvirt/images/* /home/travis/.images/
+ - sudo chown -R $(whoami):$(id -gn) /home/travis/.images/
 
 after_success:
  - sha256sum $ARTIFACTS/*.img
