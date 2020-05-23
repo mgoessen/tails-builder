@@ -1,7 +1,8 @@
 env:
   global:
     - INIT_CACHE_ONLY=1
-    - VERSION=stable
+    - TAILS_ORIGIN=https://git-tails.immerda.ch/tails
+    - TAILS_VERSION=stable
 
 branches:
   only:
@@ -14,7 +15,7 @@ language: generic
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
-  - /var/lib/libvirt/images
+  - /home/travis/.images
 
 addons:
   apt:
@@ -43,14 +44,15 @@ before_install:
  - sudo chmod 755 $HOME; sudo chmod 755 $HOME/.ssh
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
-
+ # cache cant be restored as it would requires sudo ; we do it ourselves
+ - sudo mv /home/travis/.images/* /var/lib/libvirt/images
 install:
- - git clone --recurse-submodules https://git-tails.immerda.ch/tails -j4 
+ - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
  # Force re-read of permissions
- - sudo -u $(whoami) su -c "rake basebox:clean_old"
- - sudo -u $(whoami) su -c "rake basebox:create"
- - sudo -u $(whoami) su -c "rake vm:up"
+ - sudo su $(whoami) -c "rake basebox:clean_old"
+ - sudo su $(whoami) -c "rake basebox:create"
+ - sudo su $(whoami) -c "rake vm:up"
 
 script:
  # Only build if INIT_CACHE_ONLY != 1, to allow to fill the cache. Keep one minute for it (49 vs 50).
@@ -58,7 +60,8 @@ script:
 
 before_cache:
  - sudo su travis -c "rake vm:destroy"
- - sudo chown $(whoami):$(whoami) /var/lib/libvirt/images
+ - sudo mv /var/lib/libvirt/images/* /home/travis/.images/ 
+ - sudo chown -R $(whoami):$(whoami) /home/travis/.images/ 
 
 after_success:
  - sha256sum tails/tails-*
