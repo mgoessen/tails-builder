@@ -45,7 +45,7 @@ before_install:
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
  # cache cant be restored as it would requires sudo ; we do it ourselves
- - sudo mv /home/travis/.images/* /var/lib/libvirt/images
+ - sudo mv /home/travis/.images/* /var/lib/libvirt/images || true
 install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
