@@ -60,7 +60,9 @@ install:
 
 script:
  - test INIT_CACHE_ONLY == 1 && exit 0
- - travis_wait 47 sudo su travis -c "rake build" || true
+ - while sleep 9m; do echo staying aliiiveeeeee; done &
+   - sudo su travis -c "rake build"
+ - kill %1
 
 before_cache:
  - sudo su travis -c "rake vm:destroy"
