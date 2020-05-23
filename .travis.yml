@@ -1,5 +1,5 @@
 env:
-  - INIT_CACHE_ONLY=1 # INIT_CACHE_ONLY=0
+  - INIT_CACHE_ONLY=1
   - VERSION=stable
 branches:
   only:
