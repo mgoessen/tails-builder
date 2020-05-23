@@ -14,8 +14,8 @@ env:
     - INIT_CACHE_ONLY=0 TRY=1
     # Third build should pass 
     - INIT_CACHE_ONLY=0 TRY=2
-    - allow_failures:
-      - env: TRY=0 TRY=1
+#    - allow_failures:
+#      - env: TRY=0 TRY=1
 
 branches:
   only:
