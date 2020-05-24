@@ -1,18 +1,10 @@
-env:
-  global:
-    - TAILS_ORIGIN=https://git-tails.immerda.ch/tails
-    - TAILS_VERSION=stable
-    # see https://tails.boum.org/contribute/build
-    - TAILS_BUILD_OPTIONS= 
-    - ARTIFACTS=".."
-
 branches:
   only:
   - master
 
 os: linux
 dist: bionic
-language: generic
+language: minimal
 
 cache:
   directories:
@@ -23,7 +15,7 @@ cache:
 # As it may be too short, we define 3 stages
 jobs:
   include:
-    # Setup env. Cache Vagrant box. Dont try to build.
+    # Setup env & Vagrant box. Dont try to build.
     - stage: stage1
       name: "Setup Env."
       script: skip
@@ -53,11 +45,17 @@ addons:
      - vmdebootstrap
 
 before_install:
+ # We setup Set Environment vars ourself, as defining them in
+ # Travis configuration may end using different cache, completely
+ # defeating its purpose. See https://tails.boum.org/contribute/build.
+ - export TAILS_ORIGIN=https://git-tails.immerda.ch/tails
+ - export TAILS_VERSION=stable
+ - export ARTIFACTS=".."
+ # We use Travis internal proxy. !!!TODO!!! ask if okay
+ - export http_proxy=$TRAVIS_HTTP_PROXY
+ - export TAILS_BUILD_OPTIONS=vmproxy+extproxy
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
- # Set Proxy
- - export HTTP_PROXY=$TRAVIS_HTTP_PROXY
- - export TAILS_BUILD_OPTIONS=vmproxy+extproxy;
  - sudo adduser $(whoami) kvm
  - sudo adduser $(whoami) libvirt
  - sudo adduser $(whoami) libvirt-qemu
@@ -81,6 +79,7 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Note that all the next commands are in fact concatened
+ # !!!TODO!!! why the hell timeout doesnt work
  - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
      timeout 2700 sudo su $(whoami) -c "rake build";
    kill %1
