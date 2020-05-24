@@ -74,12 +74,11 @@ install:
  - sudo su $(whoami) -c "rake vm:up"
 
 script:
- # Only run if INIT_CACHE_ONLY != 1
  # Dance to make travis happy \o/
  # But not for too long, we have to cache things after...
  # Note that all the next commands are in fact concatened
  - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-     test $INIT_CACHE_ONLY = 1 || timeout 2700 sudo su $(whoami) -c "rake build";
+     timeout 2700 sudo su $(whoami) -c "rake build";
    kill %1
 
 before_cache:
