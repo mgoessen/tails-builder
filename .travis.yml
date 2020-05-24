@@ -56,7 +56,7 @@ before_install:
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
  # Set Proxy
- - http_proxy=$TRAVIS_HTTP_PROXY
+ - export HTTP_PROXY=$TRAVIS_HTTP_PROXY
  - export TAILS_BUILD_OPTIONS=vmproxy+extproxy;
  - sudo adduser $(whoami) kvm
  - sudo adduser $(whoami) libvirt
