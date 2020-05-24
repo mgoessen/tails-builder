@@ -66,10 +66,10 @@ before_install:
  - sudo apt-get install -y linux-modules-extra-$(uname -r)
  - modprobe zram num_devices=2; for x in /dev/zram*; do
      y=$(sudo zramctl --find -s 4G -a lzo -t 2);
-     sudo mkswap $y; sudo swapon -p 5 $y;
+     sudo mkswap $y; sudo swapon -p 100 $y;
    done
  - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
- - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon -p 5 /swap
+ - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon -p 10 /swap
  - sudo mount -o remount,noatime /
  - export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
