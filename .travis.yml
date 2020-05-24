@@ -55,6 +55,9 @@ addons:
 before_install:
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
+ # Set Proxy
+ - http_proxy=$TRAVIS_HTTP_PROXY
+ - export TAILS_BUILD_OPTIONS=extproxy;
  - sudo adduser $(whoami) kvm
  - sudo adduser $(whoami) libvirt
  - sudo adduser $(whoami) libvirt-qemu
@@ -74,7 +77,6 @@ install:
  - sudo su $(whoami) -c "rake basebox:clean_old"
  - sudo su $(whoami) -c "rake basebox:create"
  - sudo su $(whoami) -c "rake vm:up"
- - sudo su $(whoami) -c "rake vm:provision"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
@@ -87,6 +89,7 @@ before_cache:
  - sudo su $(whoami) -c "rake vm:destroy"
  - sudo mv /var/lib/libvirt/images/* /home/travis/.images/
  - sudo chown -R $(whoami):$(id -gn) /home/travis/.images/
+ - ls -lah /home/travis/.images/
 
 after_success:
  - sha256sum $ARTIFACTS/*.img
