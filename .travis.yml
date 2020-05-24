@@ -65,7 +65,7 @@ before_install:
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
  # Restore our manual cache
- - test -f $CACHE_DIR/*.tar && sudo tar xf $CACHE_DIR/*.tar / || true
+ - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
 install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
@@ -83,7 +83,7 @@ script:
 
 before_cache:
  - for x in $MANUAL_CACHE_SRC; do
-     sudo tar -cf $HOME_DIR/$(basename $x) $x;
+     sudo tar -cf $HOME_DIR/$(basename $x).tar $x;
    done
  - ls -lah $CACHE_DIR
 
