@@ -65,8 +65,9 @@ before_install:
  # Poor man ramdisk & other sub-optims
  - sudo fallocate -l 20G /swap;
  - sudo mkswap /swap; sudo swapon /swap;
- - sudo mount -t tmpfs -o size=20G,noatime /var/lib/libvirt/images
+# - sudo mount -t tmpfs -o size=20G,noatime /var/lib/libvirt/images
  - sudo mount -o remount,noatime /
+ - export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
