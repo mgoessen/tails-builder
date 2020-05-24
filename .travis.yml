@@ -67,8 +67,8 @@ before_install:
  - sudo /usr/bin/init-zram-swapping
  - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
  - sudo fallocate -l 8G /swap; sudo mkswap /swap; sudo swapon /swap;
+ - mount -o remount,noatime /
  - export TAILS_BUILD_OPTIONS="ram"
-
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
