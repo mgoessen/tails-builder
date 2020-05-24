@@ -62,12 +62,14 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Poor man ramdisk & other sub-optims
- - sudo fallocate -l 20G /swap;
- - sudo mkswap /swap; sudo swapon /swap;
-# - sudo mount -t tmpfs -o size=20G,noatime /var/lib/libvirt/images
- - sudo mount -o remount,noatime /
- - export TAILS_BUILD_OPTIONS="ram"
+ # Cheap ramdisk & other (sub) optims
+ - sudo apt-get install -y linux-modules-extra-$(uname -r) zram-config
+ - sudo /usr/bin/init-zram-swapping
+ - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
+ - sudo fallocate -l 8G /swap; sudo mkswap /swap; sudo swapon /swap;
+
+# - export TAILS_BUILD_OPTIONS="ram"
+
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
