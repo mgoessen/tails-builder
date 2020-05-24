@@ -53,7 +53,7 @@ before_install:
  # We setup Set Environment vars ourself, as defining them in
  # Travis configuration may end using a different cache, which
  # would completely defeat its purpose.
- - export TAILS_ORIGIN=https://git-tails.immerda.ch/tails
+ - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
  - export TAILS_VERSION=stable
  - export ARTIFACTS=".."
  # Remove travis overides
