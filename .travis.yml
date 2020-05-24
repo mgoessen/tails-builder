@@ -19,6 +19,8 @@ jobs:
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
+# Travis use environment to define cache key. As we use env vars to
+# define our manual cache, any change would make us use a fresh cache
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
@@ -28,7 +30,7 @@ env:
   global: 
     - MANUAL_CACHE_DIR: $HOME/cache
     - MANUAL_CACHE_SRC: /var/lib/libvirt/images/tails-website-cache.qcow2 /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
-      # We dont cache the followings:
+      # We dont cache the followings
       # /var/lib/libvirt/images/tails-builder*.img
 
 addons:
@@ -59,9 +61,9 @@ before_install:
  - for group in kvm libvirt libvirt-qemu; do
      sudo adduser "$(whoami)" "$group";
    done
+ # Give vagrant-libvirt permission to read our $HOME
  # vagrant ssh breaks without it. !!!FIXME report!!!
- - sudo chmod 755 $HOME
- - sudo chmod -R 755 $HOME/.ssh 
+ - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
  # Restore our manual cache
@@ -83,9 +85,9 @@ script:
 
 before_cache:
  - for x in $MANUAL_CACHE_SRC; do
-     sudo tar -cf $HOME_DIR/$(basename $x).tar $x;
+     sudo tar -cf $MANUAL_CACHE_DIR/$(basename $x).tar $x;
    done
- - ls -lah $CACHE_DIR
+ - ls -lah $MANUAL_CACHE_DIR
 
 after_success:
  - sha256sum $ARTIFACTS/*.img
