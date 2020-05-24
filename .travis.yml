@@ -34,8 +34,8 @@ env:
   global: 
     - MANUAL_CACHE_DIR: $HOME/cache
     - MANUAL_CACHE_SRC:
-      /var/lib/libvirt/images/tails-website-cache.qcow2
-      /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
+      - /var/lib/libvirt/images/tails-website-cache.qcow2
+      - /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
       # We dont cache the followings:
       # /var/lib/libvirt/images/tails-builder*.img
 
@@ -77,7 +77,7 @@ before_install:
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
  # Restore our manual cache
- - ls -1 $CACHE_DIR && sudo tar xf $CACHE_DIR/*.tar / || true
+ - test -f $CACHE_DIR/*.tar && sudo tar xf $CACHE_DIR/*.tar / || true
 
 install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
