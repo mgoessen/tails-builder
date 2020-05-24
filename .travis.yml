@@ -67,8 +67,8 @@ before_install:
  # - export TAILS_BUILD_OPTIONS=vmproxy+extproxy
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
- - for group in kvm libvirt libvirt-qemu ; do
-     sudo adduser "$(whoami)" "$group"
+ - for group in kvm libvirt libvirt-qemu; do
+     sudo adduser "$(whoami)" "$group";
    done
  # vagrant ssh breaks without it. !!!FIXME report!!!
  - sudo chmod 755 $HOME
