@@ -5,8 +5,6 @@ env:
     # see https://tails.boum.org/contribute/build
     - TAILS_BUILD_OPTIONS= 
     - ARTIFACTS=".."
-    # Only build base VM
-    # - INIT_CACHE_ONLY=1
 
 branches:
   only:
@@ -21,14 +19,23 @@ cache:
   - /home/travis/.vagrant.d/boxes
   - /home/travis/.images
 
+# Travis limit run time to 50 min
+# As it may be too short, we define 3 stages
 jobs:
   include:
+    # Setup env. Cache Vagrant box. Dont try to build.
     - stage: stage1
+      name: "Setup Env."
       script: skip
-
+    # Try 1, likely to be too short but will feed apt-cache-ng
     - stage: stage2
-
+      name: "First attempt."
+    # Try 2, travis shall succedded. TODO, only run if necessary (cache)
     - stage: stage3
+      name: "Second attempt."
+   allow_failures:
+      - stage: stage2
+
 
 addons:
   apt:
@@ -71,8 +78,7 @@ install:
  - sudo su $(whoami) -c "rake vm:up"
 
 script:
- # Dance to make travis happy \o/
- # But not for too long, we have to cache things after...
+ # We dance to make travis happy \o/ while we output nothing
  # Note that all the next commands are in fact concatened
  - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
      timeout 2700 sudo su $(whoami) -c "rake build";
