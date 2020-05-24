@@ -13,6 +13,7 @@ branches:
 os: linux
 dist: bionic
 language: generic
+#language: minimal
 
 cache:
   directories:
@@ -31,7 +32,8 @@ jobs:
     - allow_failures:
       stage: stage2
       name: "First attempt."
-    # Try 2, travis shall succedded. TODO, only run if necessary (cache)
+    # Try 2, travis shall succedded.
+    # TODO, only run if necessary (cache previous build result)
     - stage: stage3
       name: "Second attempt."
 
@@ -78,9 +80,10 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Note that all the next commands are in fact concatened
- - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-     timeout 2700 sudo su $(whoami) -c "rake build";
-   kill %1
+# - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
+  -   timeout 100 sudo su $(whoami) -c "rake build";
+#   kill %1
+  - echo ERFERFERFERF
 
 before_cache:
  - sudo su $(whoami) -c "rake vm:destroy"
