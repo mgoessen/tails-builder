@@ -34,7 +34,7 @@ jobs:
     - stage: stage3
       name: "Second attempt."
    allow_failures:
-      - stage: stage2
+      name: stage2
 
 
 addons:
