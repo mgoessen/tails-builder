@@ -1,4 +1,3 @@
-# dummy
 branches:
   only:
   - master
@@ -7,12 +6,7 @@ os: linux
 dist: bionic
 language: minimal
 
-cache:
-  directories:
-  - /home/travis/.vagrant.d/boxes
-  - /home/travis/.images
-
-# Travis limit run time to 50 min
+# Travis limits run time to 50 min
 # As it may be too short, we define 3 stages
 jobs:
   include:
@@ -20,7 +14,8 @@ jobs:
     - stage: stage1
       name: "Setup Env."
       script: skip
-    # Try 1, likely to be too short but will feed apt-cache-ng
+      after_success: skip
+    # Try 1, likely to be time-short but will feed cache
     - allow_failures:
       stage: stage2
       name: "First attempt."
@@ -28,9 +23,24 @@ jobs:
     - stage: stage3
       name: "Second attempt."
 
+# We maintain a manual cache to allow us to cache selected files
+# and to restore files that would requires sudo access.
+cache:
+  directories:
+  - /home/travis/.vagrant.d/boxes
+  - $MANUAL_CACHE_DIR
+  timeout: 180
+env:
+  global: 
+    - MANUAL_CACHE_DIR: $HOME/cache
+    - MANUAL_CACHE_SRC:
+      /var/lib/libvirt/images/tails-website-cache.qcow2
+      /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
+      # We dont cache the followings:
+      # /var/lib/libvirt/images/tails-builder*.img
+
 addons:
   apt:
-    # https://tails.boum.org/contribute/build
     update: true
     packages:
      - psmisc
@@ -47,49 +57,47 @@ addons:
 
 before_install:
  # We setup Set Environment vars ourself, as defining them in
- # Travis configuration may end using different cache, completely
- # defeating its purpose. See https://tails.boum.org/contribute/build.
+ # Travis configuration may end using a different cache, which
+ # would completely defeat its purpose.
  - export TAILS_ORIGIN=https://git-tails.immerda.ch/tails
  - export TAILS_VERSION=stable
  - export ARTIFACTS=".."
- # We use Travis internal proxy. !!!TODO!!! ask if okay
- - export http_proxy=$TRAVIS_HTTP_PROXY
- - export TAILS_BUILD_OPTIONS=vmproxy+extproxy
+ # Use Travis internal proxy for caching. Seems to provide no gain
+ # - export http_proxy=$TRAVIS_HTTP_PROXY
+ # - export TAILS_BUILD_OPTIONS=vmproxy+extproxy
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
- - sudo adduser $(whoami) kvm
- - sudo adduser $(whoami) libvirt
- - sudo adduser $(whoami) libvirt-qemu
+ - for group in kvm libvirt libvirt-qemu ; do
+     sudo adduser "$(whoami)" "$group"
+   done
  # vagrant ssh breaks without it. !!!FIXME report!!!
  - sudo chmod 755 $HOME
  - sudo chmod 755 $HOME/.ssh 
  - sudo chmod 755 $HOME/.ssh/config
  - sudo adduser libvirt-qemu $(id -gn)
  - sudo systemctl restart libvirtd
- # cache cant be restored as it would requires sudo ; we do it ourselves
- - sudo mv /home/travis/.images/* /var/lib/libvirt/images || true
+ # Restore our manual cache
+ - ls -1 $CACHE_DIR && sudo tar xf $CACHE_DIR/*.tar / || true
 
 install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
  # We use sudo su $(whoami) to force re-read of added groups
- - sudo su $(whoami) -c "rake basebox:clean_old"
- - sudo su $(whoami) -c "rake basebox:create"
- - sudo su $(whoami) -c "rake vm:up"
+ - sudo su "$(whoami)" -c "rake basebox:clean_old"
+ - sudo su "$(whoami)" -c "rake basebox:create"
+ - sudo su "$(whoami)" -c "rake vm:up"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
- # Note that all the next commands are in fact concatened
- # !!!TODO!!! why the hell timeout doesnt work
- - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-     timeout 2700 sudo su $(whoami) -c "rake build";
+ - while sleep 5m; do echo "Staying aliiiveeeee"; done &
+     timeout 2700 sudo su "$(whoami)" -c "rake build";
    kill %1
 
 before_cache:
- - sudo su $(whoami) -c "rake vm:destroy"
- - sudo mv /var/lib/libvirt/images/* /home/travis/.images/
- - sudo chown -R $(whoami):$(id -gn) /home/travis/.images/
- - ls -lah /home/travis/.images/
+ - for x in $MANUAL_CACHE_SRC; do
+     sudo tar -cf $HOME_DIR/$(basename $x) $x;
+   done
+ - ls -lah $CACHE_DIR
 
 after_success:
  - sha256sum $ARTIFACTS/*.img
