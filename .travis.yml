@@ -28,14 +28,12 @@ jobs:
       name: "Setup Env."
       script: skip
     # Try 1, likely to be too short but will feed apt-cache-ng
-    - stage: stage2
+    - allow_failures:
+      stage: stage2
       name: "First attempt."
     # Try 2, travis shall succedded. TODO, only run if necessary (cache)
     - stage: stage3
       name: "Second attempt."
-    - allow_failures:
-      name: stage2
-
 
 addons:
   apt:
