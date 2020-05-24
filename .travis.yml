@@ -57,7 +57,7 @@ before_install:
  - unset GEM_PATH GEM_HOME
  # Set Proxy
  - http_proxy=$TRAVIS_HTTP_PROXY
- - export TAILS_BUILD_OPTIONS=extproxy;
+ - export TAILS_BUILD_OPTIONS=vmproxy+extproxy;
  - sudo adduser $(whoami) kvm
  - sudo adduser $(whoami) libvirt
  - sudo adduser $(whoami) libvirt-qemu
