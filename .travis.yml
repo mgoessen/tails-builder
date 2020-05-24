@@ -7,21 +7,15 @@ dist: bionic
 language: minimal
 
 # Travis limits run time to 50 min
-# As it may be too short, we define 3 stages
+# As it may be too short, we define 2 stages
 jobs:
   include:
-    # Setup env & Vagrant box. Dont try to build.
     - stage: stage1
       name: "Setup Env."
       script: skip
       after_success: skip
-    # Try 1, likely to be time-short but will feed cache
-    - allow_failures:
-      stage: stage2
-      name: "First attempt."
-    # Try 2, travis shall succedded. TODO, only run if necessary (cache)
-    - stage: stage3
-      name: "Second attempt."
+    - stage: stage2
+      name: "Build"
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
@@ -33,9 +27,7 @@ cache:
 env:
   global: 
     - MANUAL_CACHE_DIR: $HOME/cache
-    - MANUAL_CACHE_SRC:
-      - /var/lib/libvirt/images/tails-website-cache.qcow2
-      - /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
+    - MANUAL_CACHE_SRC: /var/lib/libvirt/images/tails-website-cache.qcow2 /var/lib/libvirt/images/apt-cacher-ng-data.qcow2
       # We dont cache the followings:
       # /var/lib/libvirt/images/tails-builder*.img
 
@@ -62,9 +54,6 @@ before_install:
  - export TAILS_ORIGIN=https://git-tails.immerda.ch/tails
  - export TAILS_VERSION=stable
  - export ARTIFACTS=".."
- # Use Travis internal proxy for caching. Seems to provide no gain
- # - export http_proxy=$TRAVIS_HTTP_PROXY
- # - export TAILS_BUILD_OPTIONS=vmproxy+extproxy
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
  - for group in kvm libvirt libvirt-qemu; do
@@ -72,9 +61,8 @@ before_install:
    done
  # vagrant ssh breaks without it. !!!FIXME report!!!
  - sudo chmod 755 $HOME
- - sudo chmod 755 $HOME/.ssh 
- - sudo chmod 755 $HOME/.ssh/config
- - sudo adduser libvirt-qemu $(id -gn)
+ - sudo chmod -R 755 $HOME/.ssh 
+ - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar xf $CACHE_DIR/*.tar / || true
@@ -102,4 +90,3 @@ before_cache:
 after_success:
  - sha256sum $ARTIFACTS/*.img
  - sha256sum $ARTIFACTS/*.iso
-
