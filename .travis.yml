@@ -21,6 +21,18 @@ cache:
   - /home/travis/.vagrant.d/boxes
   - /home/travis/.images
 
+jobs:
+  include:
+    - name: stage1
+    - stage: stage1
+    - script: skip
+
+    - name: stage2
+    - stage: stage2
+
+    - name: stage3
+    - stage: stage3
+
 addons:
   apt:
     # https://tails.boum.org/contribute/build
