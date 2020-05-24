@@ -74,6 +74,7 @@ install:
  - sudo su $(whoami) -c "rake basebox:clean_old"
  - sudo su $(whoami) -c "rake basebox:create"
  - sudo su $(whoami) -c "rake vm:up"
+ - sudo su $(whoami) -c "rake vm:provision"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
