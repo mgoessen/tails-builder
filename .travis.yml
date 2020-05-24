@@ -38,7 +38,27 @@ addons:
      - vagrant-libvirt
      - vmdebootstrap
 
-before_install:
+jobs:
+  - include:
+    - name: stage1
+    - stage: stage1
+    <<: *pre
+    <<: *install-stage1
+    <<: *post
+    - name: stage2
+    - stage: stage2
+    <<: *pre
+    <<: *install-stages23
+    <<: *post
+    - name: stage3
+    - stage: stage3
+    <<: *pre
+    <<: *install-stages23
+    <<: *post
+
+&pre:
+
+- before_install:
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
  - sudo adduser $(whoami) kvm
@@ -52,30 +72,33 @@ before_install:
  - sudo systemctl restart libvirtd
  # cache cant be restored as it would requires sudo ; we do it ourselves
  - sudo mv /home/travis/.images/* /var/lib/libvirt/images || true
-
-install:
  - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
+
+- install:
  # We use sudo su $(whoami) to force re-read of added groups
  - sudo su $(whoami) -c "rake basebox:clean_old"
  - sudo su $(whoami) -c "rake basebox:create"
  - sudo su $(whoami) -c "rake vm:up"
 
-script:
- # Only run if INIT_CACHE_ONLY != 1
+&script-stage1:
+ - true
+
+&script-stages23:
  # Dance to make travis happy \o/
  # But not for too long, we have to cache things after...
  # Note that all the next commands are in fact concatened
  - while sleep 5m; do echo 'Staying aliiiveeeee'; done &
-     test $INIT_CACHE_ONLY = 1 || timeout 2700 sudo su $(whoami) -c "rake build";
+     timeout 2700 sudo su $(whoami) -c "rake build";
    kill %1
 
-before_cache:
+&post:
+
+- before_cache:
  - sudo su $(whoami) -c "rake vm:destroy"
  - sudo mv /var/lib/libvirt/images/* /home/travis/.images/
  - sudo chown -R $(whoami):$(id -gn) /home/travis/.images/
 
-after_success:
+- after_success:
  - sha256sum $ARTIFACTS/*.img
  - sha256sum $ARTIFACTS/*.iso
-
