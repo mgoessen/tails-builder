@@ -24,7 +24,7 @@ cache:
 jobs:
   include:
     - stage: stage1
-    - script: skip
+      script: skip
 
     - stage: stage2
 
