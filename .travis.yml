@@ -68,7 +68,7 @@ before_install:
  - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
  - sudo fallocate -l 8G /swap; sudo mkswap /swap;
  - sudo swapon $(sudo losetup --direct-io -f /swap --show)
- - sudo mount -o remount,noatime,data=writeback /
+ - sudo mount -o remount,noatime /
  - export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
