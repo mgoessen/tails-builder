@@ -1,7 +1,3 @@
-branches:
-  only:
-  - master
-
 os: linux
 dist: bionic
 language: minimal
@@ -28,8 +24,8 @@ cache:
   timeout: 180
 env:
   global: 
-    - MANUAL_CACHE_DIR: $HOME/cache
-    - MANUAL_CACHE_SRC: "/var/lib/libvirt/images/tails-website-cache.qcow2 /var/lib/libvirt/images/apt-cacher-ng-data.qcow2"
+    - MANUAL_CACHE_DIR=$HOME/cache
+    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2 /var/lib/libvirt/images/tails-website-cache.qcow2"
       # We dont cache the followings
       # /var/lib/libvirt/images/tails-builder*.img
 
@@ -70,7 +66,7 @@ before_install:
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
 install:
- - git clone --recurse-submodules  -j4 $TAILS_ORIGIN
+ - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
  # We use sudo su $(whoami) to force re-read of added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
