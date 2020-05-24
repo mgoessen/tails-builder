@@ -52,6 +52,8 @@ before_install:
  - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
  - export TAILS_VERSION=stable
  - export ARTIFACTS=".."
+ - export http_proxy=$TRAVIS_APT_PROXY
+ - export TAILS_BUILD_OPTIONS="vmproxy+extproxy"
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
  - for group in kvm libvirt libvirt-qemu; do
