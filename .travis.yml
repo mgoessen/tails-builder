@@ -65,7 +65,7 @@ before_install:
  # Had swap and other (sub) optims
  - sudo mount -o remount,noatime /
  - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon /swap
- - export TAILS_BUILD_OPTIONS="" 
+ - export TAILS_BUILD_OPTIONS="extproxy"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
