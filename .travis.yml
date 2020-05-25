@@ -71,7 +71,6 @@ before_install:
 # - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
  - sudo mount -o remount,noatime /
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
- - sudo systctl vm.swappiness=100
  - export TAILS_BUILD_OPTIONS="ram" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
@@ -86,7 +85,7 @@ install:
 
 script:
  # We dance to make travis happy \o/ while we output nothing
- - while sleep 5m; do echo "Staying aliiiveeeee"; done &
+ - while sleep 1m; do echo "\[uptime\] $(uptime)"; done &
      timeout 2700 sudo su "$(whoami)" -c "rake build";
    kill %1
 
