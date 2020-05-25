@@ -72,7 +72,7 @@ before_install:
  - sudo fallocate -l 8G /swap; #loop=$(sudo losetup --direct-io -f /swap --show);
  - sudo mkswap /swap; sudo swapon -p 10 /swap
  - sudo mount -o remount,noatime /
- - sudo sysctl vm.swapiness = 100
+ - sudo sysctl vm.swappiness=100
  - export TAILS_BUILD_OPTIONS="ram" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
