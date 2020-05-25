@@ -51,7 +51,7 @@ before_install:
  # would completely defeat its purpose.
  - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
  - export TAILS_VERSION=stable
- - export ARTIFACTS=".."
+ - export ARTIFACTS=".."1
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
  - for group in kvm libvirt libvirt-qemu; do
@@ -65,7 +65,7 @@ before_install:
  # Simulate more ram, use it to build & other (sub) optims
  - sudo apt-get install -y linux-modules-extra-$(uname -r)
  - modprobe zram num_devices=2; for x in /dev/zram*; do
-     y=$(sudo zramctl --find -s 4G -a lzo -t 2);
+     y=$(sudo zramctl --find -s 2G -a lzo -t 2);
      sudo mkswap $y; sudo swapon -p 100 $y;
    done
  - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
