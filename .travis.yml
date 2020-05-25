@@ -65,7 +65,7 @@ before_install:
  # Simulate more ram, use it to build & other (sub) optims
  - sudo apt-get install -y linux-modules-extra-$(uname -r)
  - modprobe zram num_devices=2; for x in /dev/zram*; do
-     y=$(sudo zramctl --find -s 3G -a lzo -t 2);
+     y=$(sudo zramctl --find -s 4G -a lzo -t 2);
      sudo mkswap $y; sudo swapon -p 100 $y;
    done
 # - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
