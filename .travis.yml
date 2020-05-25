@@ -66,7 +66,7 @@ before_install:
  - sudo mount -o remount,noatime /
  - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon /swap
  - export http_proxy=$TRAVIS_APT_PROXY
- - export TAILS_BUILD_OPTIONS="extproxy"
+ - export TAILS_BUILD_OPTIONS="vmproxy+extproxy"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
