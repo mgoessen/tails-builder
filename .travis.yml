@@ -70,11 +70,9 @@ before_install:
 #   done
 # - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
  - sudo mount -o remount,noatime /
- - sudo fallocate -l 8G /swap;
- - loop=$(sudo losetup --direct-io -f /swap --show)
- - sudo mkswap $loop; sudo swapon -p 10 $loop
-#  - sudo sysctl vm.swappiness=100
- - export TAILS_BUILD_OPTIONS="cpus=4,ram" 
+ - sudo fallocate -l 32G /swap;
+ - sudo mkswap /swap; sudo swapon -p 10 /swap
+ - export TAILS_BUILD_OPTIONS="ram" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
