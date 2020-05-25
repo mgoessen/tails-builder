@@ -62,10 +62,6 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Had swap and other (sub) optims
- - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon /swap
- - sudo sysctl vm.swappiness=100
- - sudo mount -o remount,noatime /
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
