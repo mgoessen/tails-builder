@@ -64,6 +64,7 @@ before_install:
  - sudo systemctl restart libvirtd
  # Had swap and other (sub) optims
  - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon /swap
+ - sudo sysctl vm.swappiness=100
  - sudo mount -o remount,noatime /
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
