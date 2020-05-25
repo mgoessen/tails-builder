@@ -72,7 +72,7 @@ before_install:
  - sudo mount -o remount,noatime /
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo sysctl vm.swappiness=100
- - export TAILS_BUILD_OPTIONS="ram,cpu=3" 
+ - export TAILS_BUILD_OPTIONS="ram,cpus=3" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
