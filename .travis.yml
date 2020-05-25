@@ -1,6 +1,6 @@
 os: linux
 dist: bionic
-language: minimal
+language: shell
 
 # Travis limits run time to 50 min
 # As it may be too short, we define 2 stages
@@ -70,8 +70,7 @@ before_install:
 #   done
 # - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
  - sudo mount -o remount,noatime /
- - sudo fallocate -l 32G /swap;
- - sudo mkswap /swap; sudo swapon -p 10 /swap
+ - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon; /swap
  - export TAILS_BUILD_OPTIONS="ram" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
