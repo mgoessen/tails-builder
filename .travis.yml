@@ -72,7 +72,7 @@ before_install:
  - sudo mount -o remount,noatime /
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo sysctl vm.swappiness=100
- - export TAILS_BUILD_OPTIONS="ram" 
+ - export TAILS_BUILD_OPTIONS="ram,cpu=3" 
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
@@ -87,7 +87,7 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- - while sleep 1m; do echo "\[uptime\] $(uptime)"; done &
+ - while sleep 1m; do echo "[uptime] $(uptime)"; done &
      timeout 2700 sudo su "$(whoami)" -c "rake build";
    kill %1
 
