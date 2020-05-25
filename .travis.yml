@@ -69,7 +69,7 @@ before_install:
      sudo mkswap $y; sudo swapon -p 100 $y;
    done
  - echo Y | sudo tee /sys/module/zswap/parameters/enabled;
- - sudo fallocate -l 16G /swap; loop=$(sudo losetup --direct-io -f /swap --show);
+ - sudo fallocate -l 8G /swap; loop=$(sudo losetup --direct-io -f /swap --show);
  - sudo mkswap $loop; sudo swapon -p 10 $loop
  - sudo mount -o remount,noatime /
  - export TAILS_BUILD_OPTIONS="ram"
