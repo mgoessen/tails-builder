@@ -83,7 +83,7 @@ script:
  # - while sleep 1m; do echo "[uptime] $(uptime)"; done &
  #     timeout 2700 sudo su "$(whoami)" -c "rake build";
  #   kill %1
- - export TAILS_BUILD_OPTIONS=$TAILS_BUILD_OPTIONS,ignorechanges
+ - export TAILS_BUILD_OPTIONS=$TAILS_BUILD_OPTIONS ignorechanges
  - travis_wait 30 timeout 2700 sudo su "$(whoami)" -c "rake build";
 
 before_cache:
