@@ -80,9 +80,10 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- - while sleep 1m; do echo "[uptime] $(uptime)"; done &
-     timeout 2700 sudo su "$(whoami)" -c "rake build";
-   kill %1
+ # - while sleep 1m; do echo "[uptime] $(uptime)"; done &
+ #     timeout 2700 sudo su "$(whoami)" -c "rake build";
+ #   kill %1
+ - timeout 2700 travis_wait 30 sudo su "$(whoami)" -c "rake build";
 
 before_cache:
  - for x in $MANUAL_CACHE_SRC; do
