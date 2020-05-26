@@ -63,9 +63,9 @@ before_install:
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
  # Had swap and other (sub) optims
- - sudo fallocate -l 16G /swap; sudo mkswap /swap; sudo swapon /swap
+ - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export export TAILS_BUILD_OPTIONS="ram"
+ # - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
@@ -83,7 +83,7 @@ script:
  # - while sleep 1m; do echo "[uptime] $(uptime)"; done &
  #     timeout 2700 sudo su "$(whoami)" -c "rake build";
  #   kill %1
- - timeout 2700 travis_wait 30 sudo su "$(whoami)" -c "rake build";
+ - travis_wait 30 timeout 2700 sudo su "$(whoami)" -c "rake build";
 
 before_cache:
  - for x in $MANUAL_CACHE_SRC; do
