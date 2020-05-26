@@ -84,7 +84,7 @@ script:
  #     timeout 2700 sudo su "$(whoami)" -c "rake build";
  #   kill %1
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
- - travis_wait 30 timeout 2700 sudo su "$(whoami)" -c "rake build";
+ - travis_wait 46 timeout 2700 sudo su "$(whoami)" -c "rake build";
 
 before_cache:
  - for x in $MANUAL_CACHE_SRC; do
