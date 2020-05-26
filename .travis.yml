@@ -2,8 +2,7 @@ os: linux
 dist: bionic
 language: shell
 
-# Travis limits run time to 50 min
-# As it may be too short, we define 2 stages
+# Travis limits run time to 50 min. As it may be too short, we define 3 stages
 jobs:
   include:
     - stage: stage1
@@ -12,14 +11,14 @@ jobs:
       after_success: skip
     - allow_failures:
       stage: stage2
-      name: "Build/Fill Cache"
+      name: "Dummy cache-filling build"
     - stage: stage3
       name: "Build"
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
-# Travis use environment to define cache key. As we use env vars to
-# define our manual cache, any change would make us use a fresh cache
+# Travis use environment to define cache key. Thus, our manual
+# cache configuration, also define the instance of cache we use.
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
@@ -68,7 +67,7 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export export TAILS_BUILD_OPTIONS="ram"
+# - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
 
@@ -87,7 +86,7 @@ script:
  #     timeout 2700 sudo su "$(whoami)" -c "rake build";
  #   kill %1
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
- - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build";
+ - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
