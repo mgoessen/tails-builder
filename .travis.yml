@@ -67,7 +67,7 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export export TAILS_BUILD_OPTIONS="ram"
+ - export export TAILS_BUILD_OPTIONS="ram extproxy"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
  - ls -alh $CACHE_DIR
@@ -75,11 +75,11 @@ before_install:
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
- - grep -R . > /dev/null 2>&1 tails &; # fill cache
+ - grep -R . > /dev/null 2>&1 tails & # fill cache
  # We use sudo su $(whoami) to force re-read of added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
- - sudo su "$(whoami)" -c "rake vm:up"
+ - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake vm:up"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
