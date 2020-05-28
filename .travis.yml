@@ -75,13 +75,13 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- # - while sleep 1m; do echo "[uptime] $(uptime)"; done &
- #     timeout 2700 sudo su "$(whoami)" -c "rake build";
- #   kill %1
  - export http_proxy=$TRAVIS_APT_PROXY
  - export export TAILS_BUILD_OPTIONS="ram extproxy"
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
- - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
+ - while sleep 1m; do echo "[uptime] $(uptime)"; done &
+     timeout 2700 sudo su "$(whoami)" -c "rake build";
+   kill %1
+# - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
