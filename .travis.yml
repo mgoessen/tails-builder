@@ -67,21 +67,20 @@ before_install:
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
- - grep -R . > /dev/null 2>&1 tails & # fill cache
  # We use sudo su $(whoami) to force re-read of added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
+ - export http_proxy=$TRAVIS_APT_PROXY
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS extproxy"
  - sudo su "$(whoami)" -c "rake vm:up"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- - export http_proxy=$TRAVIS_APT_PROXY
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS extproxy"
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
  - while sleep 1m; do echo "[uptime] $(uptime)"; done &
      timeout 2700 sudo su "$(whoami)" -c "rake build";
    kill %1
+# - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
 # - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
 before_cache:
