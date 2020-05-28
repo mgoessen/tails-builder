@@ -59,8 +59,6 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export http_proxy=$TRAVIS_APT_PROXY
- - export export TAILS_BUILD_OPTIONS="ram extproxy"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
  - ls -alh $CACHE_DIR
@@ -80,6 +78,8 @@ script:
  # - while sleep 1m; do echo "[uptime] $(uptime)"; done &
  #     timeout 2700 sudo su "$(whoami)" -c "rake build";
  #   kill %1
+ - export http_proxy=$TRAVIS_APT_PROXY
+ - export export TAILS_BUILD_OPTIONS="ram extproxy"
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
  - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
