@@ -69,7 +69,8 @@ before_install:
  - sudo mount -o remount,noatime /
  - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
- - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
+ - test -f $CACHE_DIR/*.tar && sudo tar -xvf $CACHE_DIR/*.tar / || true
+ - ls -l /var/lib/libvirt/images || true
 
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
@@ -85,11 +86,11 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- - while sleep 1m; do echo "[uptime] $(uptime)"; done &
-     timeout 2400 sudo su "$(whoami)" -c "rake build";
-   kill %1
-# - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
-# - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
+ #- while sleep 1m; do echo "[uptime] $(uptime)"; done &
+ #    timeout 2400 sudo su "$(whoami)" -c "rake build";
+ #  kill %1
+- export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
+- travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
