@@ -78,9 +78,9 @@ install:
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
  - sudo su "$(whoami)" -c "rake vm:up"
- - sudo su "$(whoami)" -c "rake vm:ssh df -h"
- - sudo su "$(whoami)" -c "rake vm:ssh cat /proc/cpuinfo"
- - sudo su "$(whoami)" -c "rake vm:ssh cat /proc/meminfo"
+ - sudo su "$(whoami)" -c "vagrant ssh -c 'df -h'"
+ - sudo su "$(whoami)" -c "vagrant ssh -c 'cat /proc/cpuinfo'"
+ - sudo su "$(whoami)" -c "vagrant ssh -c 'cat /proc/meminfo'"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
