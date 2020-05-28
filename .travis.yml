@@ -67,6 +67,7 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
+ - export http_proxy=TRAVIS_APT_PROXY
  - export export TAILS_BUILD_OPTIONS="ram extproxy"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
