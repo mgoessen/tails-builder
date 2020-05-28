@@ -68,10 +68,10 @@ install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
  # We use sudo su $(whoami) to force re-read of added groups
- - sudo su "$(whoami)" -c "rake basebox:clean_old"
- - sudo su "$(whoami)" -c "rake basebox:create"
  - export http_proxy=$TRAVIS_APT_PROXY
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS vmproxy+extproxy"
+ - sudo su "$(whoami)" -c "rake basebox:clean_old"
+ - sudo su "$(whoami)" -c "rake basebox:create"
  - sudo su "$(whoami)" -c "rake vm:up"
 
 script:
