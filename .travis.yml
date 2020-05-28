@@ -71,7 +71,7 @@ install:
  - grep -R . > /dev/null 2>&1 tails & # fill cache
  # We use sudo su $(whoami) to force re-read of added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
- - sudo su "$(whoami)" -c "rake basebox:create"
+ - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake basebox:create"
  - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake vm:up"
 
 script:
