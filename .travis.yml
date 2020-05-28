@@ -22,14 +22,6 @@ jobs:
 cache:
   directories:
   - /home/travis/.vagrant.d/boxes
-  - $MANUAL_CACHE_DIR
-  timeout: 180
-env:
-  global: 
-    - MANUAL_CACHE_DIR=$HOME/cache
-    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2 /var/lib/libvirt/images/tails-website-cache.qcow2"
-      # We dont cache the followings
-      # /var/lib/libvirt/images/tails-builder*.img
 
 addons:
   apt:
@@ -93,10 +85,6 @@ script:
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
- - for x in $MANUAL_CACHE_SRC; do
-     sudo tar -cf $MANUAL_CACHE_DIR/$(basename $x).tar $x;
-   done
- - ls -lah $MANUAL_CACHE_DIR
 
 after_success:
  - sha256sum $ARTIFACTS/*.img
