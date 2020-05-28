@@ -59,6 +59,7 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
+ - export export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram"
  # Restore our manual cache
  - test -f $CACHE_DIR/*.tar && sudo tar -xf $CACHE_DIR/*.tar / || true
  - ls -alh $CACHE_DIR
@@ -76,7 +77,7 @@ script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
  - export http_proxy=$TRAVIS_APT_PROXY
- - export export TAILS_BUILD_OPTIONS="ram extproxy"
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS extproxy"
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
  - while sleep 1m; do echo "[uptime] $(uptime)"; done &
      timeout 2700 sudo su "$(whoami)" -c "rake build";
