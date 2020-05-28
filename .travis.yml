@@ -71,7 +71,7 @@ install:
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
  - export http_proxy=$TRAVIS_APT_PROXY
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS extproxy"
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS vmproxy+extproxy"
  - sudo su "$(whoami)" -c "rake vm:up"
 
 script:
