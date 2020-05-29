@@ -1,0 +1,11 @@
+--- Rakefile	2020-05-28 08:43:28.239687859 +0200
++++ Rakefile	2020-05-29 07:13:52.012954441 +0200
+@@ -253,7 +253,7 @@
+       value = $1
+       if is_release?
+         $stderr.puts "Building a release ⇒ ignoring #{opt} build option"
+-        ENV['TAILS_WEBSITE_CACHE'] = '0'
++        ENV['TAILS_WEBSITE_CACHE'] = '0' if value != "force"
+       else
+         value = 'yes' if value.nil?
+         case value
