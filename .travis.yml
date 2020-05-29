@@ -29,7 +29,7 @@ cache:
 env:
   global: 
     - MANUAL_CACHE_DIR=$HOME/mycache
-    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/*"
+    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/"
 
 addons:
   apt:
