@@ -17,6 +17,7 @@ jobs:
       name: "Build"
   - allow_failures:
     - stage: stage2
+      name: "Dummy cache-filling build"
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
