@@ -100,7 +100,7 @@ script:
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
- - for x in "$MANUAL_CACHE_SRC"; do
+ - for x in $MANUAL_CACHE_SRC; do
      sudo tar -cf "$MANUAL_CACHE_DIR/$(basename $x).tar" "$x";
    done
  - ls -lah $MANUAL_CACHE_DIR
