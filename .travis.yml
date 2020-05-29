@@ -29,7 +29,9 @@ cache:
 env:
   global: 
     - MANUAL_CACHE_DIR=$HOME/mycache
-    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/"
+    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2 /var/lib/libvirt/images/tails-website-cache.qcow2"
+      # We dont cache the followings
+      # /var/lib/libvirt/images/tails-builder*.img
 
 addons:
   apt:
@@ -66,14 +68,14 @@ before_install:
  # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export export TAILS_BUILD_OPTIONS="ram"
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      test -f "$x" && sudo tar -C / -xvf "$x";
    done || true
-# # Allow to cache website anyway
-# - patch <allow-force-website-cache.patch Rakefile
-# - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
+# Allow to cache website anyway
+ - patch <allow-force-website-cache.patch Rakefile
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
 
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
