@@ -1,3 +1,5 @@
+#if: tag IS present
+
 os: linux
 dist: bionic
 language: shell
@@ -69,7 +71,7 @@ before_install:
  - sudo mount -o remount,noatime /
  - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
- - test -f $MANUAL_CACHE_DIR/*.tar && sudo tar -xvf $MANUAL_CACHE_DIR/*.tar / || true
+ - sudo tar -xvf $MANUAL_CACHE_DIR/*.tar / || true
  - sudo ls -l /var/lib/libvirt/images || true
 
 install:
