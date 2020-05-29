@@ -66,10 +66,10 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Had swap and other (sub) optims
- - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
- - sudo mount -o remount,noatime /
- - export export TAILS_BUILD_OPTIONS="ram"
+# # Had swap and other (sub) optims
+# - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
+# - sudo mount -o remount,noatime /
+# - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      sudo tar -C / -xvf $x;
