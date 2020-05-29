@@ -78,7 +78,7 @@ install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
 # Allow to cache website anyway
- - patch <allow-force-website-cache.patch Rakefile
+ - patch <../allow-force-website-cache.patch Rakefile
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
  # We use sudo su $(whoami) to use added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
