@@ -72,9 +72,8 @@ before_install:
  - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - cd /; for x in $MANUAL_CACHE_DIR/*.tar; do
-     sudo tar -xvf $x || true
+     sudo tar -xvf $x;
    done; cd -
- - sudo ls -l /var/lib/libvirt/images || true
 
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
