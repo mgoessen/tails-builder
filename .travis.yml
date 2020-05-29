@@ -54,7 +54,7 @@ before_install:
  # Travis configuration may end using a different cache, which
  # would completely defeat its purpose.
  - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
- - export TAILS_VERSION=4.6 -b 4.6
+ - export TAILS_VERSION="4.6 -b 4.6"
  - export ARTIFACTS=".."
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
@@ -67,14 +67,14 @@ before_install:
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
 # # Had swap and other (sub) optims
-# - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
-# - sudo mount -o remount,noatime /
-# - export export TAILS_BUILD_OPTIONS="ram"
+ - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
+ - sudo mount -o remount,noatime /
+ - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      sudo tar -C / -xvf $x;
    done;
-# # Allow to use cache for website anyway
+# # Allow to cache website anyway
 # - patch <allow-force-website-cache.patch
 # - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
 
