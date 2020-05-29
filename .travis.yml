@@ -6,7 +6,7 @@ language: minimal
 
 # Travis limits run time to 50 min. As it may be too short, we define 3 stages
 jobs:
-  - include:
+  include:
     - stage: stage1
       name: "Setup Env."
       script: skip
@@ -15,7 +15,7 @@ jobs:
       name: "Dummy cache-filling build"
     - stage: stage3
       name: "Build"
-  - allow_failures:
+  allow_failures:
     - stage: stage2
       name: "Dummy cache-filling build"
 
