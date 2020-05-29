@@ -73,18 +73,18 @@ before_install:
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      test -f "$x" && sudo tar -C / -xvf "$x";
    done || true
-# Allow to cache website anyway
- - patch <allow-force-website-cache.patch Rakefile
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
 
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
+# Allow to cache website anyway
+ - patch <allow-force-website-cache.patch Rakefile
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
  # We use sudo su $(whoami) to use added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
  - sudo su "$(whoami)" -c "rake vm:up"
- - echo "df -h" | sudo su "$(whoami)" -c "rake vm:ssh"
+# - echo "df -h" | sudo su "$(whoami)" -c "rake vm:ssh"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
