@@ -71,7 +71,9 @@ before_install:
  - sudo mount -o remount,noatime /
  - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
- - sudo tar -xvf $MANUAL_CACHE_DIR/*.tar / || true
+ - cd /; for x in $MANUAL_CACHE_DIR/*.tar; do
+     sudo tar -xvf $x || true
+   done; cd -
  - sudo ls -l /var/lib/libvirt/images || true
 
 install:
