@@ -11,11 +11,12 @@ jobs:
       name: "Setup Env."
       script: skip
       after_success: skip
-    - allow_failures:
-      stage: stage2
+    - stage: stage2
       name: "Dummy cache-filling build"
     - stage: stage3
       name: "Build"
+    - allow_failures:
+      - stage: stage2
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
