@@ -68,8 +68,8 @@ before_install:
  - sudo mount -o remount,noatime /
  - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
- - for x in $MANUAL_CACHE_DIR/*.tar; do
-     test -f $x && sudo tar -C / -xvf $x
+ - for x in MANUAL_CACHE_DIR/*.tar; do
+     test -f "$x" && sudo tar -C / -xvf "$x";
    done;
 # # Allow to cache website anyway
 # - patch <allow-force-website-cache.patch Rakefile
@@ -96,8 +96,8 @@ script:
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
- - for x in $MANUAL_CACHE_SRC; do
-     sudo tar -cf $MANUAL_CACHE_DIR/$(basename $x).tar $x;
+ - for x in "$MANUAL_CACHE_SRC"; do
+     sudo tar -cf "$MANUAL_CACHE_DIR/$(basename $x).tar" "$x";
    done
  - ls -lah $MANUAL_CACHE_DIR
 
