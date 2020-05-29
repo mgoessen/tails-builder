@@ -66,17 +66,17 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
-# # Had swap and other (sub) optims
-# - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
-# - sudo mount -o remount,noatime /
-# - export export TAILS_BUILD_OPTIONS="ram"
+ # Had swap and other (sub) optims
+ - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
+ - sudo mount -o remount,noatime /
+ - export export TAILS_BUILD_OPTIONS="ram"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      sudo tar -C / -xvf $x;
    done;
-# # Allow to cache website anyway
-# - patch <allow-force-website-cache.patch
-# - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
+# Allow to cache website anyway
+ - patch <allow-force-website-cache.patch
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
 
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
@@ -90,11 +90,11 @@ install:
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
- #- while sleep 1m; do echo "[uptime] $(uptime)"; done &
+ #- while sleep 300; do echo "Staying aliiiveeeee"; done &
  #    timeout 2400 sudo su "$(whoami)" -c "rake build";
  #  kill %1
-- export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
-- travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
+ - travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build" || true
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
