@@ -40,12 +40,12 @@ addons:
 jobs:
   include:
     - stage: stage1
-      name: "Setup Env."
+      name: "Setup Environment"
       script: skip
       after_success: skip
     - stage: stage2
       name: "Dummy cache-filling build"
-      before-script: export timeout=40
+      before-script: export timeout=42
     - stage: stage3
       name: "Build"
       before-script: export timeout=50
@@ -58,7 +58,7 @@ before_install:
  # Travis configuration may end using a different cache, which
  # would completely defeat its purpose.
  - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
- - export TAILS_VERSION="4.8"
+ - export TAILS_VERSION="4.8 -b 4.8"
  - export ARTIFACTS=".."
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
@@ -79,8 +79,8 @@ before_install:
    done || true
 
 install:
- - git clone --recurse-submodules -j8 $TAILS_ORIGIN -b $TAILS_VERSION --depth 1
- - cd tails;
+ - git clone --recurse-submodules -j8 $TAILS_ORIGIN
+ - cd tails; git checkout $TAILS_VERSION
 # Allow to cache website anyway
  - patch <../allow-force-website-cache.patch Rakefile
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
@@ -90,12 +90,6 @@ install:
  - sudo su "$(whoami)" -c "rake vm:up"
 
 script:
- # We dance to make travis happy \o/ while we output nothing
- # Travis provide travis_wait for that, but wont show log if stopped
- # Note that the following commands are in fact concatenated
- # - while sleep 300; do echo "Staying aliiiveeeee"; done &
- #    timeout 2400 sudo su "$(whoami)" -c "rake build";
- #  kill %1
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
  - travis_wait $timeout timeout $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
 
@@ -109,6 +103,3 @@ before_cache:
 after_success:
  - sha256sum $ARTIFACTS/*.img
  - sha256sum $ARTIFACTS/*.iso
-
-# to debug use:
-#- echo "df -h" | sudo su "$(whoami)" -c "rake vm:ssh"
