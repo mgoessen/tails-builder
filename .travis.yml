@@ -97,9 +97,9 @@ script:
  #  kill %1
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
  - if [ $TRAVIS_BUILD_STAGE_NAME -eq "stage2" ]; then 
-     travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build"
+     travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build";
    else
-     travis_wait 50 sudo su "$(whoami)" -c "rake build" 
+     travis_wait 50 sudo su "$(whoami)" -c "rake build";
    fi;
 
 before_cache:
