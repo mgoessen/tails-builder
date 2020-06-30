@@ -12,15 +12,14 @@ jobs:
       script: skip
       after_success: skip
     - stage: stage2
-      name: "Dummy cache-filling build"
       before-script: export timeout=40
+      name: "Dummy cache-filling build"
     - stage: stage3
-      name: "Build"
       before-script: export timeout=50
-  allow_failures: # Have to copy ALL the parameters to map
+      name: "Build"
+  allow_failures:
     - stage: stage2
       name: "Dummy cache-filling build"
-      before-script: export timeout=40
 
 # We maintain a manual cache to allow us to cache selected files
 # and to restore files that would requires sudo access.
@@ -34,10 +33,9 @@ cache:
 env:
   global: 
     - MANUAL_CACHE_DIR=$HOME/mycache
-    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2"
-    # We dont cache the followings
-    # /var/lib/libvirt/images/tails-website-cache.qcow2
-    # /var/lib/libvirt/images/tails-builder*.img
+    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2 /var/lib/libvirt/images/tails-website-cache.qcow2"
+      # We dont cache the followings
+      # /var/lib/libvirt/images/tails-builder*.img
 
 addons:
   apt:
@@ -71,10 +69,10 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Had swap as ram and other (sub) optims
+ # Had swap and other (sub) optims
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram"
+ # - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      test -f "$x" && sudo tar -C / -xvf "$x";
@@ -83,18 +81,24 @@ before_install:
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
+# Allow to cache website anyway
+ - patch <../allow-force-website-cache.patch Rakefile
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
  # We use sudo su $(whoami) to use added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
  - sudo su "$(whoami)" -c "rake vm:up"
+# - echo "df -h" | sudo su "$(whoami)" -c "rake vm:ssh"
 
 script:
  # We dance to make travis happy \o/ while we output nothing
  # Travis provide travis_wait for that, but wont show log if stopped
  # Note that the following commands are in fact concatenated
- - while sleep 300; do echo "Staying aliiiveeeee"; done &
-     timeout $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
-   kill %1
+ # - while sleep 300; do echo "Staying aliiiveeeee"; done &
+ #    timeout 2400 sudo su "$(whoami)" -c "rake build";
+ #  kill %1
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
+ - travis_wait $timeout timeout $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
