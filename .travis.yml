@@ -12,8 +12,10 @@ jobs:
       script: skip
       after_success: skip
     - stage: stage2
+      before-script: export timeout=40
       name: "Dummy cache-filling build"
     - stage: stage3
+      before-script: export timeout=50
       name: "Build"
   allow_failures:
     - stage: stage2
@@ -96,11 +98,7 @@ script:
  #    timeout 2400 sudo su "$(whoami)" -c "rake build";
  #  kill %1
  - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges"
- - if [ $TRAVIS_BUILD_STAGE_NAME -eq "stage2" ]; then 
-     travis_wait 40 timeout 2400 sudo su "$(whoami)" -c "rake build";
-   else
-     travis_wait 50 sudo su "$(whoami)" -c "rake build";
-   fi;
+ - travis_wait $timeout timeout $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
