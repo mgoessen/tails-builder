@@ -69,10 +69,11 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Had swap as ram and other (sub)optimizations
+ # Had swap as ram, cpu overcommit and other (sub)optimizations
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram"
+ - cpus=$(( $(grep -c '^processor\s*:' /proc/cpuinfo) + 1 ))
+ - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram cpus=$cpus"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      test -f "$x" && sudo tar -C / -xvf "$x";
@@ -94,7 +95,7 @@ script:
  # Travis provide travis_wait for that, but wont show log if stopped
  # Note that the following commands are in fact concatenated
   - while sleep 300; do echo "Staying aliiiveeeee"; done &
-     timeout -k 30 2400 sudo su "$(whoami)" -c "rake build";
+     timeout -k 30 $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
    kill %1
 
 before_cache:
