@@ -95,8 +95,8 @@ script:
  # Travis provide travis_wait for that, but wont show log if stopped
  # Note that the following commands are in fact concatenated
   - while sleep 300; do echo "Staying aliiiveeeee"; done &
-     timeout -k 30 $(($timeout*60)) sudo su "$(whoami)" -c "rake build";
-   kill %1
+     timeout -k 30 $(($timeout*60)) sudo su "$(whoami)" -c "rake build"; ret=$?;
+   kill %1; exit $ret;
 
 before_cache:
  - sudo su "$(whoami)" -c "rake vm:destroy"
