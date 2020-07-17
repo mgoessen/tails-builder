@@ -72,8 +72,6 @@ before_install:
  # Had swap as ram, cpu overcommit and other (sub)optimizations
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
- - cpus=$(( $(grep -c '^processor\s*:' /proc/cpuinfo) + 1 ))
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ram cpus=$cpus"
  # Restore our manual cache
  - for x in $MANUAL_CACHE_DIR/*.tar; do
      test -f "$x" && sudo tar -C / -xvf "$x";
