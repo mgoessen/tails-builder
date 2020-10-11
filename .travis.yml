@@ -16,8 +16,9 @@ cache:
 env:
   global: 
     - MANUAL_CACHE_DIR=$HOME/mycache
-    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2 /var/lib/libvirt/images/tails-website-cache.qcow2"
+    - MANUAL_CACHE_SRC="/var/lib/libvirt/images/apt-cacher-ng-data.qcow2"
       # We dont cache the followings
+      # /var/lib/libvirt/images/tails-website-cache.qcow2
       # /var/lib/libvirt/images/tails-builder*.img
 
 addons:
@@ -69,7 +70,7 @@ before_install:
  - sudo chmod 755 $HOME ; sudo chmod -R 755 $HOME/.ssh
  - sudo adduser libvirt-qemu "$(id -gn)"
  - sudo systemctl restart libvirtd
- # Had swap as ram, cpu overcommit and other (sub)optimizations
+ # Had swap and other (sub)optimizations
  - sudo fallocate -l 24G /swap; sudo mkswap /swap; sudo swapon /swap
  - sudo mount -o remount,noatime /
  # Restore our manual cache
@@ -80,9 +81,6 @@ before_install:
 install:
  - git clone --recurse-submodules -j8 $TAILS_ORIGIN
  - cd tails; git checkout $TAILS_VERSION
-# Allow to cache website anyway
- - patch <../allow-force-website-cache.patch Rakefile
- - export TAILS_BUILD_OPTIONS="$TAILS_BUILD_OPTIONS ignorechanges cachewebsite=force"
  # We use sudo su $(whoami) to use added groups
  - sudo su "$(whoami)" -c "rake basebox:clean_old"
  - sudo su "$(whoami)" -c "rake basebox:create"
