@@ -37,7 +37,6 @@ addons:
      - vagrant-libvirt
      - vmdebootstrap
 
-# Travis limits run time to 50 min. As it may be too short, we define 3 stages
 jobs:
   include:
     - stage: stage1
@@ -46,20 +45,15 @@ jobs:
       after_success: skip
     - stage: stage2
       name: "Dummy cache-filling build"
-      before-script: export timeout=42
-    - stage: stage3
-      name: "Build"
-      before-script: export timeout=50
-  allow_failures:
-    - stage: stage2
-      name: "Dummy cache-filling build"
+      # travis limits jobs to 120 mins
+      before-script: export timeout=110
 
 before_install:
  # We setup Set Environment vars ourself, as defining them in
  # Travis configuration may end using a different cache, which
  # would completely defeat its purpose.
  - export TAILS_ORIGIN=https://salsa.debian.org/tails-team/tails/
- - export TAILS_VERSION="stable"
+ - export TAILS_VERSION="4.19 -b 4.19"
  - export ARTIFACTS=".."
  # Remove travis overides
  - unset GEM_PATH GEM_HOME
